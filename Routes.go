@@ -14,6 +14,7 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
+
     Route{
         "Index",
         "GET",
@@ -32,4 +33,33 @@ var routes = Routes{
         "/users/{usreid}",
         UserShow,
     },
+    Route{
+        "Version",
+        "GET",
+        "/version",
+        Version,
+    },
+    Route{
+        "Status",
+        "GET",
+        "/status",
+        NotImplemented,
+    },
+
+    Route{
+        "Authenticate",
+        "POST",
+        "/authenticate",
+        CreateTokenEndpoint,
+    },
+    Route{
+        "Test",
+        "GET",
+        "/test",
+        Authenticate(TestEndpoint),
+    },
+
+    // router.HandleFunc("/authenticate", CreateTokenEndpoint).Methods("POST")
+    // router.HandleFunc("/protected", ProtectedEndpoint).Methods("GET")
+    // router.HandleFunc("/test", ValidateMiddleware(TestEndpoint)).Methods("GET")
 }
