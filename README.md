@@ -9,9 +9,16 @@ c) determine the right choice of technologies for a high performance, reliable s
 
 ## Goals (TBD)
 
-- Add oauth2 support for user authentication
+- ~~Add oauth2 support for user authentication~~ JWT is more appropriate for API authentication.
 - Use external file (yaml or json) for configuration
 
+# TODO
+
+The current focus of work:
+- Get authentication system in place
+    - Setup database for users
+    - Validate /authenticate against user database
+- Figure out how to handle routing better, so heimdall can be included in another project and just provide the routing/etc.
 ## Resources
 
 Tutorials and articles that I've used/read to build this:
