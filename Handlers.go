@@ -8,7 +8,7 @@ import (
     "github.com/gorilla/context"
     "github.com/gorilla/mux"
     "github.com/mitchellh/mapstructure"
-
+    
     "html"
     "net/http"
 //    "strings"
@@ -30,7 +30,7 @@ type Exception struct {
 func CreateTokenEndpoint(w http.ResponseWriter, req *http.Request) {
     var user ApiUser
     _ = json.NewDecoder(req.Body).Decode(&user)
-    
+
     // Don't encode the password in the token
     token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
         "username": user.Username,

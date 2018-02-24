@@ -11,6 +11,7 @@ c) determine the right choice of technologies for a high performance, reliable s
 
 - ~~Add oauth2 support for user authentication~~ JWT is more appropriate for API authentication.
 - Use external file (yaml or json) for configuration
+- Ability to process payments via Stripe and (maybe) Paypal
 
 # TODO
 
@@ -25,3 +26,4 @@ Tutorials and articles that I've used/read to build this:
 - https://golang.org/doc/code.html
 - https://thenewstack.io/make-a-restful-json-api-go/
 - https://www.thepolyglotdeveloper.com/2017/03/authenticate-a-golang-api-with-json-web-tokens/
+-[Example of using viper for configuration](https://github.com/devilsray/golang-viper-config-example/)
