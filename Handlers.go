@@ -8,16 +8,16 @@ import (
     "github.com/gorilla/context"
     "github.com/gorilla/mux"
     "github.com/mitchellh/mapstructure"
-    
+
     "html"
     "net/http"
 //    "strings"
 )
 
-type ApiUser struct {
-    Username string `json:"username"`
-    Password string `json:"password"`
-}
+// type ApiUser struct {
+//     Username string `json:"username"`
+//     Password string `json:"password"`
+// }
 
 type JwtToken struct {
     Token string `json:"token"`
@@ -28,19 +28,26 @@ type Exception struct {
 }
 
 func CreateTokenEndpoint(w http.ResponseWriter, req *http.Request) {
-    var user ApiUser
-    _ = json.NewDecoder(req.Body).Decode(&user)
+    var client ApiClient
 
-    // Don't encode the password in the token
-    token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
-        "username": user.Username,
-    })
-    // TODO: move the secret to an external config file
-    tokenString, error := token.SignedString([]byte("secret"))
-    if error != nil {
-        fmt.Println(error)
+    _ = json.NewDecoder(req.Body).Decode(&client)
+
+    if err := db.Where("username = ? and password = ?", client.Username, client.Password).First(&client).Error; err != nil {
+        json.NewEncoder(w).Encode(Exception{Message: "Invalid credentials."})
+        return
+    } else {
+        // Don't encode the password in the token
+        token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
+            "username": client.Username,
+        })
+        // TODO: move the secret to an external config file
+        tokenString, error := token.SignedString([]byte("secret"))
+        if error != nil {
+            fmt.Println(error)
+        }
+        json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
     }
-    json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
+
 }
 
 func Authenticate(next http.HandlerFunc) http.HandlerFunc {
@@ -73,7 +80,7 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 
 func TestEndpoint(w http.ResponseWriter, req *http.Request) {
     decoded := context.Get(req, "decoded")
-    var user ApiUser
+    var user ApiClient
     mapstructure.Decode(decoded.(jwt.MapClaims), &user)
     json.NewEncoder(w).Encode(user)
 }

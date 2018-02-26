@@ -6,9 +6,21 @@ import (
     "log"
     "net/http"
     // "github.com/fsnotify/fsnotify"
-    "github.com/spf13/viper"
     "github.com/adamisrael/heimdall/config"
+    "github.com/spf13/viper"
+
+    "github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
+
+var db *gorm.DB
+var err error
+
+type ApiClient struct {
+	ID        uint   `json:"id"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+}
 
 func main() {
 
@@ -26,15 +38,21 @@ func main() {
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
-	// log.Printf("database uri is %s", configuration.Database.ConnectionUri)
-	log.Printf("port for this application is %d", configuration.Server.Port)
 
-    // viper.SetConfigType("yaml")
-    //
     // viper.WatchConfig()
     // viper.OnConfigChange(func(e fsnotify.Event) {
     // 	fmt.Println("Config file changed:", e.Name)
     // })
+
+    // Init database
+    db, err = gorm.Open("sqlite3", "./heimdall.db")
+    if err != nil {
+		fmt.Println(err)
+	}
+	defer db.Close()
+    db.AutoMigrate(&ApiClient{})
+
+	log.Printf("port for this application is %d", configuration.Server.Port)
 
     flag.Parse()
     fmt.Println("Verbose:", *verbose)
