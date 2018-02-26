@@ -1,0 +1,6 @@
+database:
+    ConnectionUri: ""
+
+# http(s) options
+server:
+    port: 8080
