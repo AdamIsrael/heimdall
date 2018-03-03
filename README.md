@@ -9,17 +9,34 @@ c) determine the right choice of technologies for a high performance, reliable s
 
 ## Architecture
 
-### application binaries
-cmd/heimdall
+### Application binaries
+`cmd/heimdall`
 
 ### Public libraries that can be used by external projects
-pkg/
+`pkg/`
+```
+├── client
+│   └── model.go
+├── config
+│   ├── configuration.go
+│   ├── database.go
+│   └── server.go
+├── http
+│   ├── handlers.go
+│   ├── router.go
+│   └── routes.go
+├── logger
+│   └── logger.go
+├── user
+│   ├── create.go
+│   ├── login/
+│   ├── logout/
+│   ├── model.go
+│   └── signup/
+└── version.go
+```
 
-
-user/
-config/
-
-### Internal libraries
+### Internal libraries (TBD)
 internal/
 
 
